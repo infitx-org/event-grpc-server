@@ -1,0 +1,638 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0",
+        "title": "Open API for Event Sidecar",
+        "description": "Open API for Event Sidecar",
+        "license": {
+            "name": "Apache 2.0"
+        }
+    },
+    "basePath": "/",
+    "schemes": [
+        "http"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "paths": {
+        "/health": {
+            "get": {
+                "description": "The HTTP request GET /health is used to return the current status of the Event Sidecar API.",
+                "summary": "Get Health",
+                "tags": [
+                    "api"
+                ],
+                "operationId": "GetHealth",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/responses/ResponseHealth200"
+                    },
+                    "400": {
+                        "$ref": "#/responses/ErrorResponse400"
+                    },
+                    "401": {
+                        "$ref": "#/responses/ErrorResponse401"
+                    },
+                    "403": {
+                        "$ref": "#/responses/ErrorResponse403"
+                    },
+                    "404": {
+                        "$ref": "#/responses/ErrorResponse404"
+                    },
+                    "405": {
+                        "$ref": "#/responses/ErrorResponse405"
+                    },
+                    "406": {
+                        "$ref": "#/responses/ErrorResponse406"
+                    },
+                    "501": {
+                        "$ref": "#/responses/ErrorResponse501"
+                    },
+                    "503": {
+                        "$ref": "#/responses/ErrorResponse503"
+                    }
+                }
+            }
+        },
+        "/event": {
+            "post": {
+                "description": "The HTTP request POST /event is a REST endpoint to add an event to a Kafka Topic.",
+                "summary": "Post Event",
+                "tags": [
+                    "api"
+                ],
+                "operationId": "PostEvent",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/EventPayload"
+                        }
+                    }
+                ],
+                "x-examples": {
+                    "application/json": {
+                        "from": "noresponsepayeefsp",
+                        "to": "payerfsp",
+                        "id": "aa398930-f210-4dcd-8af0-7c769cea1660",
+                        "content": {
+                            "headers": {
+                                "content-type": "application/vnd.interoperability.transfers+json;version=1.0",
+                                "date": "'2019-05-28T16:34:41.000Z'",
+                                "fspiop-source": "noresponsepayeefsp",
+                                "fspiop-destination": "payerfsp"
+                            },
+                            "payload": "'data:application/vnd.interoperability.transfers+json;version=1.0;base64,ewogICJmdWxmaWxtZW50IjogIlVObEo5OGhaVFlfZHN3MGNBcXc0aV9VTjN2NHV0dDdDWkZCNHlmTGJWRkEiLAogICJjb21wbGV0ZWRUaW1lc3RhbXAiOiAiMjAxOS0wNS0yOVQyMzoxODozMi44NTZaIiwKICAidHJhbnNmZXJTdGF0ZSI6ICJDT01NSVRURUQiCn0'"
+                        },
+                        "type": "application/json",
+                        "metadata": {
+                            "event": {
+                                "id": "3920382d-f78c-4023-adf9-0d7a4a2a3a2f",
+                                "type": "trace",
+                                "action": "start",
+                                "createdAt": "'2019-05-29T23:18:32.935Z'",
+                                "state": {
+                                    "status": "success",
+                                    "code": 0,
+                                    "description": "action successful"
+                                },
+                                "responseTo": "1a396c07-47ab-4d68-a7a0-7a1ea36f0012"
+                            },
+                            "trace": {
+                                "service": "central-ledger-prepare-handler",
+                                "traceId": "bbd7b2c7-3978-408e-ae2e-a13012c47739",
+                                "parentSpanId": "4e3ce424-d611-417b-a7b3-44ba9bbc5840",
+                                "spanId": "efeb5c22-689b-4d04-ac5a-2aa9cd0a7e87",
+                                "timestamp": "'2015-08-29T11:22:09.815479Z'"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "$ref": "#/responses/Response201"
+                    },
+                    "400": {
+                        "$ref": "#/responses/ErrorResponse400"
+                    },
+                    "401": {
+                        "$ref": "#/responses/ErrorResponse401"
+                    },
+                    "403": {
+                        "$ref": "#/responses/ErrorResponse403"
+                    },
+                    "404": {
+                        "$ref": "#/responses/ErrorResponse404"
+                    },
+                    "405": {
+                        "$ref": "#/responses/ErrorResponse405"
+                    },
+                    "406": {
+                        "$ref": "#/responses/ErrorResponse406"
+                    },
+                    "501": {
+                        "$ref": "#/responses/ErrorResponse501"
+                    },
+                    "503": {
+                        "$ref": "#/responses/ErrorResponse503"
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "ErrorCode": {
+            "title": "ErrorCode",
+            "type": "string",
+            "pattern": "^[1-9]\\d{3}$",
+            "description": "The API data type ErrorCode is a JSON String of four characters, consisting of digits only. Negative numbers are not allowed. A leading zero is not allowed. Each error code in the API is a four-digit number, for example, 1234, where the first number (1 in the example) represents the high-level error category, the second number (2 in the example) represents the low-level error category, and the last two numbers (34 in the example) represents the specific error."
+        },
+        "ErrorDescription": {
+            "title": "ErrorDescription",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "description": "Error description string."
+        },
+        "ExtensionKey": {
+            "title": "ExtensionKey",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 32,
+            "description": "Extension key."
+        },
+        "ExtensionValue": {
+            "title": "ExtensionValue",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "description": "Extension value."
+        },
+        "ErrorInformation": {
+            "title": "ErrorInformation",
+            "type": "object",
+            "description": "Data model for the complex type ErrorInformation.",
+            "properties": {
+                "errorCode": {
+                    "type": "string",
+                    "description": "Specific error number."
+                },
+                "errorDescription": {
+                    "type": "string",
+                    "description": "Error description string."
+                },
+                "extensionList": {
+                    "$ref": "#/definitions/ExtensionList"
+                }
+            },
+            "required": [
+                "errorCode",
+                "errorDescription"
+            ]
+        },
+        "ErrorInformationResponse": {
+            "title": "ErrorInformationResponse",
+            "type": "object",
+            "description": "Data model for the complex type object that contains an optional element ErrorInformation used along with 4xx and 5xx responses.",
+            "properties": {
+                "errorInformation": {
+                    "$ref": "#/definitions/ErrorInformation"
+                }
+            }
+        },
+        "Extension": {
+            "title": "Extension",
+            "type": "object",
+            "description": "Data model for the complex type Extension",
+            "properties": {
+                "key": {
+                    "type": "string",
+                    "description": "Extension key."
+                },
+                "value": {
+                    "type": "string",
+                    "description": "Extension value."
+                }
+            },
+            "required": [
+                "key",
+                "value"
+            ]
+        },
+        "ExtensionList": {
+            "title": "ExtensionList",
+            "type": "object",
+            "description": "Data model for the complex type ExtensionList",
+            "properties": {
+                "extension": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Extension"
+                    },
+                    "minItems": 1,
+                    "maxItems": 16,
+                    "description": "Number of Extension elements"
+                }
+            },
+            "required": [
+                "extension"
+            ]
+        },
+        "Status": {
+            "title": "Status",
+            "type": "object",
+            "description": "Data model for the api status.",
+            "properties": {
+                "status": {
+                    "type": "string",
+                    "description": "The return current status"
+                },
+                "uptime": {
+                    "type": "number",
+                    "description": "Duration that the server is running"
+                },
+                "startTime": {
+                    "type": "string",
+                    "description": "Time the server started"
+                },
+                "versionNumber": {
+                    "type": "string",
+                    "description": "Current version of the API"
+                }
+            }
+        },
+        "EventPayload": {
+            "title": "EventPayload",
+            "type": "object",
+            "description": "Data model for the complex type EventPayload.",
+            "properties": {
+                "from": {
+                    "type": "string",
+                    "description": "The initiator of the message"
+                },
+                "to": {
+                    "type": "string",
+                    "description": "The recipient of the message"
+                },
+                "id": {
+                    "type": "string",
+                    "description": "Unique identifier for message"
+                },
+                "pp": {
+                    "type": "string",
+                    "description": "Unique identifier for message"
+                },
+                "content": {
+                    "$ref": "#/definitions/Content"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "The type of the payload i.e. application/json"
+                },
+                "metadata": {
+                    "$ref": "#/definitions/Metadata"
+                }
+            },
+            "required": [
+                "from",
+                "to",
+                "id",
+                "type",
+                "content"
+            ]
+        },
+        "Content": {
+            "title": "Content",
+            "type": "object",
+            "description": "Content object in EventPayload",
+            "properties": {
+                "headers": {
+                    "$ref": "#/definitions/Headers"
+                },
+                "payload": {
+                    "type": "string",
+                    "description": "base 64 encrypted payload for processing"
+                }
+            }
+        },
+        "Headers": {
+            "title": "Headers",
+            "type": "object",
+            "description": "Headers passed in kafka message",
+            "properties": {
+                "content-type": {
+                    "type": "string",
+                    "description": "Content type for message"
+                },
+                "date": {
+                    "type": "string",
+                    "description": "A UTC format of the date"
+                },
+                "fspiop-source": {
+                    "type": "string",
+                    "description": "The FSP that the message originated from"
+                },
+                "fspiop-destination": {
+                    "type": "string",
+                    "description": "The FSP that the message is going to"
+                }
+            }
+        },
+        "Metadata": {
+            "title": "Metadata",
+            "type": "object",
+            "description": "The metadata of the Kafka message",
+            "properties": {
+                "event": {
+                    "$ref": "#/definitions/Event"
+                },
+                "trace": {
+                    "$ref": "#/definitions/Trace"
+                }
+            },
+            "required": [
+                "event",
+                "trace"
+            ]
+        },
+        "Event": {
+            "title": "Event",
+            "type": "object",
+            "description": "The event object of the metadata",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "description": "The FSP that the message is going to"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "The FSP that the message is going to"
+                },
+                "action": {
+                    "type": "string",
+                    "description": "The FSP that the message is going to"
+                },
+                "createdAt": {
+                    "type": "string",
+                    "description": "The FSP that the message is going to"
+                },
+                "state": {
+                    "$ref": "#/definitions/State"
+                },
+                "responseTo": {
+                    "type": "string",
+                    "description": "Response UUID for previous message"
+                }
+            },
+            "required": [
+                "id",
+                "type",
+                "action",
+                "createdAt",
+                "state"
+            ]
+        },
+        "Trace": {
+            "title": "Trace",
+            "type": "object",
+            "description": "The trace object for auditing and logging",
+            "properties": {
+                "service": {
+                    "type": "string",
+                    "description": "The API the message is going through"
+                },
+                "traceId": {
+                    "type": "string",
+                    "description": "The traceId for the span of the message"
+                },
+                "parentSpanId": {
+                    "type": "string",
+                    "description": "The parentId of the span"
+                },
+                "spanId": {
+                    "type": "string",
+                    "description": "The Id for the span of the process"
+                },
+                "timestamp": {
+                    "type": "string",
+                    "description": "The current timestamp of the message"
+                }
+            },
+            "required": [
+                "service",
+                "traceId",
+                "spanId"
+            ]
+        },
+        "State": {
+            "title": "State",
+            "type": "object",
+            "description": "The current state of the message",
+            "properties": {
+                "status": {
+                    "type": "string",
+                    "description": "The status of the message"
+                },
+                "code": {
+                    "type": "number",
+                    "description": "Error code"
+                },
+                "description": {
+                    "type": "string",
+                    "description": "The description of the error code"
+                }
+            },
+            "required": [
+                "status"
+            ]
+        }
+    },
+    "responses": {
+        "ResponseHealth200": {
+            "description": "OK",
+            "schema": {
+                "$ref": "#/definitions/Status"
+            }
+        },
+        "Response201": {
+            "description": "Created"
+        },
+        "Response204": {
+            "description": "No Content"
+        },
+        "ErrorResponse400": {
+            "description": "Bad Request - The application cannot process the request; for example, due to malformed syntax or the payload exceeded size restrictions.",
+            "schema": {
+                "$ref": "#/definitions/ErrorInformationResponse"
+            },
+            "headers": {
+                "Content-Length": {
+                    "description": "The Content-Length header field indicates the anticipated size of the payload body. Only sent if there is a body.",
+                    "type": "integer"
+                },
+                "Content-Type": {
+                    "description": "The Content-Type header indicates the specific version of the API used to send the payload body.",
+                    "type": "string"
+                }
+            }
+        },
+        "ErrorResponse401": {
+            "description": "Unauthorized - The request requires authentication in order to be processed.",
+            "schema": {
+                "$ref": "#/definitions/ErrorInformationResponse"
+            },
+            "headers": {
+                "Content-Length": {
+                    "description": "The Content-Length header field indicates the anticipated size of the payload body. Only sent if there is a body.",
+                    "type": "integer"
+                },
+                "Content-Type": {
+                    "description": "The Content-Type header indicates the specific version of the API used to send the payload body.",
+                    "type": "string"
+                }
+            }
+        },
+        "ErrorResponse403": {
+            "description": "Forbidden - The request was denied and will be denied in the future.",
+            "schema": {
+                "$ref": "#/definitions/ErrorInformationResponse"
+            },
+            "headers": {
+                "Content-Length": {
+                    "description": "The Content-Length header field indicates the anticipated size of the payload body. Only sent if there is a body.",
+                    "type": "integer"
+                },
+                "Content-Type": {
+                    "description": "The Content-Type header indicates the specific version of the API used to send the payload body.",
+                    "type": "string"
+                }
+            }
+        },
+        "ErrorResponse404": {
+            "description": "Not Found - The resource specified in the URI was not found.",
+            "schema": {
+                "$ref": "#/definitions/ErrorInformationResponse"
+            },
+            "headers": {
+                "Content-Length": {
+                    "description": "The Content-Length header field indicates the anticipated size of the payload body. Only sent if there is a body.",
+                    "type": "integer"
+                },
+                "Content-Type": {
+                    "description": "The Content-Type header indicates the specific version of the API used to send the payload body.",
+                    "type": "string"
+                }
+            }
+        },
+        "ErrorResponse405": {
+            "description": "Method Not Allowed - An unsupported HTTP method for the request was used.",
+            "schema": {
+                "$ref": "#/definitions/ErrorInformationResponse"
+            },
+            "headers": {
+                "Content-Length": {
+                    "description": "The Content-Length header field indicates the anticipated size of the payload body. Only sent if there is a body.",
+                    "type": "integer"
+                },
+                "Content-Type": {
+                    "description": "The Content-Type header indicates the specific version of the API used to send the payload body.",
+                    "type": "string"
+                }
+            }
+        },
+        "ErrorResponse406": {
+            "description": "Not acceptable - The server is not capable of generating content according to the Accept headers sent in the request. Used in the API to indicate that the server does not support the version that the client is requesting.",
+            "schema": {
+                "$ref": "#/definitions/ErrorInformationResponse"
+            },
+            "headers": {
+                "Content-Length": {
+                    "description": "The Content-Length header field indicates the anticipated size of the payload body. Only sent if there is a body.",
+                    "type": "integer"
+                },
+                "Content-Type": {
+                    "description": "The Content-Type header indicates the specific version of the API used to send the payload body.",
+                    "type": "string"
+                }
+            }
+        },
+        "ErrorResponse501": {
+            "description": "Not Implemented - The server does not support the requested service. The client should not retry.",
+            "schema": {
+                "$ref": "#/definitions/ErrorInformationResponse"
+            },
+            "headers": {
+                "Content-Length": {
+                    "description": "The Content-Length header field indicates the anticipated size of the payload body. Only sent if there is a body.",
+                    "type": "integer"
+                },
+                "Content-Type": {
+                    "description": "The Content-Type header indicates the specific version of the API used to send the payload body.",
+                    "type": "string"
+                }
+            }
+        },
+        "ErrorResponse503": {
+            "description": "Service Unavailable - The server is currently unavailable to accept any new service requests. This should be a temporary state, and the client should retry within a reasonable time frame.",
+            "schema": {
+                "$ref": "#/definitions/ErrorInformationResponse"
+            },
+            "headers": {
+                "Content-Length": {
+                    "description": "The Content-Length header field indicates the anticipated size of the payload body. Only sent if there is a body.",
+                    "type": "integer"
+                },
+                "Content-Type": {
+                    "description": "The Content-Type header indicates the specific version of the API used to send the payload body.",
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "parameters": {
+        "Accept": {
+            "name": "accept",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "The Accept header field indicates the version of the API the client would like the server to use."
+        },
+        "Accept-Optional": {
+            "name": "accept",
+            "in": "header",
+            "required": false,
+            "type": "string",
+            "description": "The Accept header field indicates the version of the API the client would like the server to use."
+        },
+        "Content-Length": {
+            "name": "content-length",
+            "in": "header",
+            "required": false,
+            "type": "integer",
+            "description": "The Content-Length header field indicates the anticipated size of the payload body. Only sent if there is a body. Note - The API supports a maximum size of 5242880 bytes (5 Megabytes)"
+        },
+        "Content-Type": {
+            "name": "content-type",
+            "in": "header",
+            "type": "string",
+            "required": true,
+            "description": "The Content-Type header indicates the specific version of the API used to send the payload body."
+        },
+        "Date": {
+            "name": "date",
+            "in": "header",
+            "type": "string",
+            "required": true,
+            "description": "The Date header field indicates the date when the request was sent."
+        }
+    }
+}

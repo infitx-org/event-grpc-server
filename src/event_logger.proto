@@ -1,0 +1,95 @@
+syntax = "proto3";
+import "google/protobuf/any.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/struct.proto";
+
+package mojaloop.events;
+
+enum EventType {
+  UNDEFINED = 0;
+  log = 1;
+  audit = 2;
+  trace = 3;
+}
+
+enum EventTypeAction {
+  UNDEFINED = 0;
+  info = 1;
+  debug = 2;
+  verbose = 3;
+  perf = 4;
+  warn = 5;
+  error = 6;
+  span = 7;
+  default = 8;
+  start = 9;
+  finish = 10;
+  egress = 11;
+  ingress = 12;
+}
+
+//TODO add whats missing
+
+enum EventStatusType {
+  UNDEFINED = 0;
+  success = 1;
+  failed = 2;
+}
+
+message EventTraceMetadata {
+  string service = 1;
+  string traceId = 2;
+  string spanId = 3;
+  string parentSpanId = 4; // Optional
+  int32 sampled = 5; // Optional
+  int32 flags = 6; // Optional
+  string startTimestamp = 7; // Optional. ISO 8601
+  string finishTimestamp = 8; // Optional. ISO 8601
+  map<string, string> tags = 9; // Optional
+}
+
+message EventStateMetadata {
+  EventStatusType status = 1;
+  int32 code = 2; // Optional
+  string description = 3; // Optional
+}
+
+message EventMetadata {
+  string id = 1;
+  EventType type = 2;
+  EventTypeAction action = 3;
+  string createdAt = 4; // ISO 8601
+  string responseTo = 5; // Optional
+  EventStateMetadata state = 6;
+}
+
+message MessageMetadata {
+  EventMetadata event = 1;
+  EventTraceMetadata trace = 2;
+}
+
+message EventMessage {
+  string id = 1;
+  string from = 2; // Optional
+  string to = 3; // Optional
+  string pp = 4; // Optional
+  MessageMetadata metadata = 5; // Optional
+  string type = 6;
+  google.protobuf.Any content = 7;
+}
+
+enum LogResponseStatus {
+  UNDEFINED = 0;
+  pending = 1;
+  accepted = 2;
+  error = 3;
+
+}
+
+message LogResponse {
+  LogResponseStatus status  = 1;
+}
+
+service EventLoggerService {
+  rpc Log (EventMessage) returns (LogResponse);
+}

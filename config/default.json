@@ -1,0 +1,56 @@
+{
+  "PORT": 4001,
+  "EVENT_LOGGER_GRPC_HOST": "localhost",
+  "EVENT_LOGGER_GRPC_PORT": 50057,
+  "INSTRUMENTATION": {
+    "METRICS": {
+      "DISABLED": false,
+      "labels": {
+        "eventId": "*"
+      },
+      "config": {
+        "timeout": 5000,
+        "prefix": "moja_",
+        "defaultLabels": {
+          "serviceName": "event-sidecar"
+        }
+      }
+    }
+  },
+  "TARGET": "AWS_SQS",
+  "AWS_SQS": {
+    "REGION": "eu-west-1",
+    "SQS_QUEUE_NAME": "tets-audit-log",
+    "SQS_QUEUE_URL": "https://sqs.eu-west-2.amazonaws.com/886403637725/tets-audit-log",
+    "SQS_API_VERSION": "2012-11-05"
+  },
+  "KAFKA": {
+    "TOPIC_TEMPLATES": {
+      "GENERAL_TOPIC_TEMPLATE": {
+        "TEMPLATE": "topic-{{functionality}}",
+        "REGEX": "topic-(.*)"
+      }
+    },
+    "PRODUCER": {
+      "EVENT": {
+        "config": {
+          "options": {
+            "messageCharset": "utf8"
+          },
+          "rdkafkaConf": {
+            "metadata.broker.list": "localhost:9092",
+            "client.id": "es-prod-event",
+            "event_cb": true,
+            "dr_cb": true,
+            "socket.keepalive.enable": true,
+            "queue.buffering.max.messages": 10000000
+          },
+          "topicConf": {
+            "request.required.acks": "all",
+            "partitioner": "murmur2_random"
+          }
+        }
+      }
+    }
+  }
+}
