@@ -1,5 +1,7 @@
 # Event-GRPC-Server
 
+__Note: This is experimental and design decision is not taken about this service yet.__
+
 This is a gRPC server which is an extension to `event-sidecar` service from mojaloop.
 
 This service doesn't need to be run as a sidecar, it can be run as a standalone service.
