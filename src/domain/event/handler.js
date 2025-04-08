@@ -30,6 +30,7 @@
 'use strict'
 
 const kafkaUtil = require('../../lib/kafka/util')
+const sqsUtil = require('../../lib/sqs/util')
 const Enums = require('../../lib/enum')
 const Config = require('../../lib/config.js')
 
@@ -47,7 +48,7 @@ const logEvent = async (message) => {
     case Enums.target.KAFKA:
       return kafkaUtil.produceGeneralMessage(Enums.eventType.EVENT, message, message.metadata.trace.traceId)
     case Enums.target.AWS_SQS:
-      throw new Error(`Target ${Config.TARGET} is not supported yet`)
+      return sqsUtil.produceGeneralMessage(Enums.eventType.EVENT, message, message.metadata.trace.traceId)
     default:
       throw new Error(`Unknown target ${Config.TARGET}`)
   }

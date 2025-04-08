@@ -19,9 +19,9 @@
   },
   "TARGET": "AWS_SQS",
   "AWS_SQS": {
-    "REGION": "eu-west-1",
-    "SQS_QUEUE_NAME": "tets-audit-log",
-    "SQS_QUEUE_URL": "https://sqs.eu-west-2.amazonaws.com/886403637725/tets-audit-log",
+    "REGION": "eu-west-2",
+    "SQS_QUEUE_NAME": "test-audit-log",
+    "SQS_QUEUE_URL": "https://sqs.eu-west-2.amazonaws.com/886403637725/test-audit-log",
     "SQS_API_VERSION": "2012-11-05"
   },
   "KAFKA": {

@@ -18,6 +18,22 @@ const openAPIOptions = {
   handlers: Path.resolve(__dirname, './handlers')
 }
 
+function decodeProtoBufAnyJson(any) {
+  if (any.type_url === 'application/json' && any.value) {
+    const buffer = Buffer.from(any.value)
+    const jsonString = buffer.toString('utf-8')
+    try {
+      return JSON.parse(jsonString)
+    } catch (err) {
+      console.error('Failed to parse JSON from Any.value buffer:', err)
+      return null
+    }
+  } else {
+    console.warn('Unsupported type_url or missing value')
+    return null
+  }
+}
+
 const packageDefinition = protoLoader.loadSync(PROTO_PATH, {
   keepCase: true,
   longs: String,
@@ -102,6 +118,11 @@ const logHandler = async (call, callback) => {
 
   if (!eventMessage.metadata && eventMessage.content && eventMessage.content.trace && eventMessage.content) {
     eventMessage.metadata = eventMessage.content
+  }
+
+  const decodedContent = decodeProtoBufAnyJson(eventMessage.content)
+  if (decodedContent) {
+    eventMessage.content = decodedContent
   }
   try {
     await eventHandler.logEvent(eventMessage)
